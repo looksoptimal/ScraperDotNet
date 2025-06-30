@@ -40,13 +40,21 @@ Note: if your machine doesn't have an NVidia graphic card, running an LLM on it 
    ```
 
 5. (optional) Download a LLM
+
+   Either (for NVidia graphic cards with at least 12GB VRAM):
    ```
    ollama pull gemma3:12b
+   ```
+
+   Or (for CPU inference or NVidia graphic cards with at least 4GB VRAM):
+   ```
+   ollama pull gemma3:4b
    ```
 
    Note: skip this step if you don't want to use AI
 
 6. Create/update the database
+
    The app needs an SqlServer database (tested on SqlServer 2022 - it might work on a lower version but I never tested it). It uses Entity Framework Core to create the database and apply migrations. See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
 
 ## Running and Configuration
@@ -58,7 +66,7 @@ The application uses `appsettings.local.json` for configuration. Key settings in
 - **ConnectionStrings:ScraperContext**: SQL Server connection string
 - **PageSaveLocation**: Directory to save downloaded content
 - **Ai**: Optional section - if removed, the app won't use AI
-- **Ai:OllamaModelName**: Name of the Ollama model to use (default: gemma3:12b)
+- **Ai:OllamaModelName**: Name of the Ollama model to use (default: gemma3:12b). Change this to 'gemma3:4b' if you pulled the smaller model in the setup step.
 - **Ai:OllamaEndpoint**: URL where Ollama is running (default: http://localhost:11434)
 - **Browser:HideUI**: Whether to run the browser in headless mode or with visible user interface (default: false)
 - **WaitForUserActionOnBlockedPages**: If a page contains a captcha or requires a user to log in, you can turn this setting to **true**. In this case, if a login page or captcha is spotted, you will be able to sign in. Otherwise the page will be skipped.
