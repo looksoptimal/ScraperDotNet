@@ -1,10 +1,10 @@
-# ScrapperDotNet
+# ScraperDotNet
 
 ## Overview
 
-ScrapperDotNet is a web scraper built on the .NET platform. It's designed to navigate and extract web content for further analysing/processing. The application can save data to a SQL Server database or the file system, and leverages AI/LLM capabilities to analyze and understand website content. 
+ScraperDotNet is a web scraper built on the .NET platform. It's designed to navigate and extract web content for further analysing/processing. The application can save data to a SQL Server database or the file system, and leverages AI/LLM capabilities to analyze and understand website content. 
 
-ScrapperDotNet can handle complex websites built with JavaScript rendering, perform scrolling operations to get data that loads on the fly when you scroll down, capture screenshots, and save pages as PDFs. It can also download content that is attached to pages and served from FTP(S). 
+ScraperDotNet can handle complex websites built with JavaScript rendering, perform scrolling operations to get data that loads on the fly when you scroll down, capture screenshots, and save pages as PDFs. It can also download content that is attached to pages and served from FTP(S). 
 
 It integrates with AI models to verify if the content on the page is valid.
 
@@ -22,7 +22,7 @@ It integrates with AI models to verify if the content on the page is valid.
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/ScrapperDotNet.git
+   git clone https://github.com/yourusername/ScraperDotNet.git
    ```
 
 2. Restore dependencies:
@@ -48,7 +48,7 @@ It integrates with AI models to verify if the content on the page is valid.
 
 The application uses `appsettings.local.json` for configuration. Key settings include:
 
-- **ConnectionStrings:ScrapperContext**: SQL Server connection string
+- **ConnectionStrings:ScraperContext**: SQL Server connection string
 - **PageSaveLocation**: Directory to save downloaded content
 - **Ai**: Optional section - if removed, the app won't use AI
 - **Ai:OllamaModelName**: Name of the Ollama model to use (default: gemma3:12b)
