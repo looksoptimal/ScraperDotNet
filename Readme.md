@@ -14,9 +14,11 @@ It integrates with AI models to verify if the content on the page is valid.
 
 - .NET 8.0 or later (https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - SQL Server 2022 or later (if you want to have it locally you can use a docker container https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-deployment?view=sql-server-ver16&pivots=cs1-bash or you can install a free Express edition: https://www.microsoft.com/en-ie/download/details.aspx?id=104781)
+- Playwright with Chromium (https://playwright.dev/docs/intro)
 - (optional) Ollama (for LLM features, https://ollama.com/download)
 - (optional) Python (https://www.python.org/downloads/)
-- Playwright with Chromium (https://playwright.dev/docs/intro)
+
+Note: if your machine doesn't have an NVidia graphic card, running an LLM on it might significantly slow it down or not run at all. If this is your case, you can disable using AI by removing the AI section from the appsettings.local.json file
 
 ### Setup
 
@@ -41,6 +43,11 @@ It integrates with AI models to verify if the content on the page is valid.
    ```
    ollama pull gemma3:12b
    ```
+
+   Note: skip this step if you don't want to use AI
+
+6. Create/update the database
+   The app needs an SqlServer database (tested on SqlServer 2022 - it might work on a lower version but I never tested it). It uses Entity Framework Core to create the database and apply migrations. See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
 
 ## Running and Configuration
 
