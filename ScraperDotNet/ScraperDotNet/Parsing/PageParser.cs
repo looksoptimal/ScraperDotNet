@@ -209,7 +209,7 @@ namespace ScraperDotNet.Parsing
                     continue; // Skip links that are not in the same domain
                 }
 
-                var absoluteUriString = absoluteUri.ToString();
+                var absoluteUriString = absoluteUri.AbsoluteUri;
                 if (!_existingUrls.Contains(absoluteUriString))
                 {
                     var (newAddress, created) = _addressService.GetOrCreate(
