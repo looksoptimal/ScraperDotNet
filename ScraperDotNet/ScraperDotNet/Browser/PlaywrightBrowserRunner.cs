@@ -72,7 +72,8 @@ namespace ScraperDotNet.Browser
                         await DelayService.WaitSplitASecAsync();
                     }
                 }
-                else {
+                else
+                {
                     bottomReached = true;
                 }
             }
@@ -104,6 +105,7 @@ namespace ScraperDotNet.Browser
             {
                 result.AddressStatus = AddressOpeningStatus.FailedToLoad;
                 result.ErrorMessage = $"Page load timed out after 30 seconds: {ex.Message}";
+                return result;
             }
             catch (PlaywrightException ex) when (ex.Message.Contains("net::ERR_CONNECTION_REFUSED") ||
                                                ex.Message.Contains("net::ERR_CONNECTION_TIMED_OUT") ||
@@ -111,6 +113,7 @@ namespace ScraperDotNet.Browser
             {
                 result.AddressStatus = AddressOpeningStatus.CantConnect;
                 result.ErrorMessage = $"Connection error: {ex.Message}";
+                return result;
             }
             catch (PlaywrightException ex) when (ex.Message.Contains("net::ERR_ABORTED"))
             {
@@ -130,17 +133,20 @@ namespace ScraperDotNet.Browser
                 {
                     result.AddressStatus = AddressOpeningStatus.FailedToLoad;
                     result.ErrorMessage = $"Playwright error - page aborted for url: {pageUrl} (potentially triggered by a download link). Message: {ex.Message}";
+                    return result;
                 }
             }
             catch (PlaywrightException ex)
             {
                 result.AddressStatus = AddressOpeningStatus.FailedToLoad;
                 result.ErrorMessage = $"Playwright error: {ex.Message}";
+                return result;
             }
             catch (Exception ex)
             {
                 result.AddressStatus = AddressOpeningStatus.FailedToLoad;
                 result.ErrorMessage = $"Unexpected error loading page: {ex.Message}";
+                return result;
             }
 
             if (response == null)
@@ -383,7 +389,7 @@ namespace ScraperDotNet.Browser
             return _page.ScreenshotAsync(new PageScreenshotOptions
             {
                 Path = path,
-                Type = ScreenshotType.Png, 
+                Type = ScreenshotType.Png,
                 FullPage = false // Capture just what is visible in the viewport
             });
         }

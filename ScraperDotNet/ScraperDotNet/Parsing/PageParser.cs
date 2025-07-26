@@ -113,64 +113,64 @@ namespace ScraperDotNet.Parsing
             var bodyText = GetBodyText(page.Content);
             if (bodyText == null) return newAddresses;
 
-//            var prompt = @"Classify the following text, which was copied from a webpage. Respond with ONLY ONE WORD representing the most
-//likely page type from these options: Error, ForSale, Login, CAPTCHA, Content. If unsure, respond with 'Content'.";
-//            var aiResponse = await _aiClient.GetResponseAsync($"{prompt}\n\n{bodyText}");
-//            switch (aiResponse.ToLower())
-//            {
-//                case "error":
-//                    _logger.LogWarning("Page {PageId} classified as error", page.Id);
-//                    //_context.Attach(page.Address);
-//                    address.Status = AddressStatus.ErrorOnPage;
-//                    if (!string.IsNullOrWhiteSpace(address.Comment) && !address.Comment.EndsWith(' '))
-//                    {
-//                        address.Comment += "; ";
-//                    }
-//                    address.Comment += "Page classified as error by AI; ";
-//                    await _context.SaveChangesAsync();
-//                    return newAddresses;
-//                case "forsale":
-//                    _logger.LogWarning("Page {PageId} classified as ForSale", page.Id);
-//                    //_context.Attach(address);
-//                    address.Status = AddressStatus.ErrorOnPage;
-//                    if (!string.IsNullOrWhiteSpace(address.Comment) && !address.Comment.EndsWith(' '))
-//                    {
-//                        address.Comment += "; ";
-//                    }
-//                    address.Comment += "Page classified as ForSale by AI; ";
-//                    await _context.SaveChangesAsync();
-//                    return newAddresses;
-//                case "login":
-//                    _logger.LogWarning("Page {PageId} classified as login; ", page.Id);
-//                    //_context.Attach(address);
-//                    address.Status = AddressStatus.RequiresUserAction;
-//                    if (!string.IsNullOrWhiteSpace(address.Comment) && !address.Comment.EndsWith(' '))
-//                    {
-//                        address.Comment += "; ";
-//                    }
-//                    address.Comment += "Page classified as login by AI; ";
-//                    await _context.SaveChangesAsync();
-//                    return newAddresses;
-//                case "captcha":
-//                    _logger.LogWarning("Page {PageId} classified as captcha", page.Id);
-//                    //_context.Attach(address);
-//                    address.Status = AddressStatus.RequiresUserAction;
-//                    if (!string.IsNullOrWhiteSpace(address.Comment) && !address.Comment.EndsWith(' '))
-//                    {
-//                        address.Comment += "; ";
-//                    }
-//                    address.Comment += "Page classified as captcha by AI; ";
-//                    await _context.SaveChangesAsync();
-//                    return newAddresses;
-//            }
+            //            var prompt = @"Classify the following text, which was copied from a webpage. Respond with ONLY ONE WORD representing the most
+            //likely page type from these options: Error, ForSale, Login, CAPTCHA, Content. If unsure, respond with 'Content'.";
+            //            var aiResponse = await _aiClient.GetResponseAsync($"{prompt}\n\n{bodyText}");
+            //            switch (aiResponse.ToLower())
+            //            {
+            //                case "error":
+            //                    _logger.LogWarning("Page {PageId} classified as error", page.Id);
+            //                    //_context.Attach(page.Address);
+            //                    address.Status = AddressStatus.ErrorOnPage;
+            //                    if (!string.IsNullOrWhiteSpace(address.Comment) && !address.Comment.EndsWith(' '))
+            //                    {
+            //                        address.Comment += "; ";
+            //                    }
+            //                    address.Comment += "Page classified as error by AI; ";
+            //                    await _context.SaveChangesAsync();
+            //                    return newAddresses;
+            //                case "forsale":
+            //                    _logger.LogWarning("Page {PageId} classified as ForSale", page.Id);
+            //                    //_context.Attach(address);
+            //                    address.Status = AddressStatus.ErrorOnPage;
+            //                    if (!string.IsNullOrWhiteSpace(address.Comment) && !address.Comment.EndsWith(' '))
+            //                    {
+            //                        address.Comment += "; ";
+            //                    }
+            //                    address.Comment += "Page classified as ForSale by AI; ";
+            //                    await _context.SaveChangesAsync();
+            //                    return newAddresses;
+            //                case "login":
+            //                    _logger.LogWarning("Page {PageId} classified as login; ", page.Id);
+            //                    //_context.Attach(address);
+            //                    address.Status = AddressStatus.RequiresUserAction;
+            //                    if (!string.IsNullOrWhiteSpace(address.Comment) && !address.Comment.EndsWith(' '))
+            //                    {
+            //                        address.Comment += "; ";
+            //                    }
+            //                    address.Comment += "Page classified as login by AI; ";
+            //                    await _context.SaveChangesAsync();
+            //                    return newAddresses;
+            //                case "captcha":
+            //                    _logger.LogWarning("Page {PageId} classified as captcha", page.Id);
+            //                    //_context.Attach(address);
+            //                    address.Status = AddressStatus.RequiresUserAction;
+            //                    if (!string.IsNullOrWhiteSpace(address.Comment) && !address.Comment.EndsWith(' '))
+            //                    {
+            //                        address.Comment += "; ";
+            //                    }
+            //                    address.Comment += "Page classified as captcha by AI; ";
+            //                    await _context.SaveChangesAsync();
+            //                    return newAddresses;
+            //            }
 
-//            if (aiResponse.ToLower() != "content")
-//            {
-//                _logger.LogWarning("The AI failed to classify the page {PageId}. It responded with: {Classification}", page.Id, aiResponse);
-//                _context.Attach(address);
-//                address.Comment = $"Page classified as '{aiResponse}' by AI";
-//                await _context.SaveChangesAsync();
-//            }
+            //            if (aiResponse.ToLower() != "content")
+            //            {
+            //                _logger.LogWarning("The AI failed to classify the page {PageId}. It responded with: {Classification}", page.Id, aiResponse);
+            //                _context.Attach(address);
+            //                address.Comment = $"Page classified as '{aiResponse}' by AI";
+            //                await _context.SaveChangesAsync();
+            //            }
 
             var bodyHtml = GetBodyHtml(page.Content);
             var links = GetLinks(bodyHtml);
@@ -212,15 +212,23 @@ namespace ScraperDotNet.Parsing
                 var absoluteUriString = absoluteUri.AbsoluteUri;
                 if (!_existingUrls.Contains(absoluteUriString))
                 {
-                    var (newAddress, created) = _addressService.GetOrCreate(
-                        absoluteUriString,
-                        ignoreQueryString,
-                        $"Found on page {page.Id}, titled: {link.Text?.Substring(0, Math.Min(link.Text?.Length ?? 0, 100))}",
-                        contentGroup);
-
-                    if (created)
+                    try
                     {
-                        newAddresses.Add(newAddress);
+                        var (newAddress, created) = _addressService.GetOrCreate(
+                            absoluteUriString,
+                            ignoreQueryString,
+                            $"Found on page {page.Id}, titled: {link.Text?.Substring(0, Math.Min(link.Text?.Length ?? 0, 100))}",
+                            contentGroup);
+
+                        if (created)
+                        {
+                            newAddresses.Add(newAddress);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error creating address for URL {Url} extracted from page {PageId}", absoluteUriString, page.Id);
+                        continue; // Skip this link if there's an error
                     }
 
                     _existingUrls.Add(absoluteUriString);
@@ -244,7 +252,15 @@ namespace ScraperDotNet.Parsing
             if (newAddresses.Any() && page.Address.ContentGroup == null)
             {
                 page.Address.ContentGroup = groupName;
-                await _context.SaveChangesAsync(cancellationToken);
+                try
+                {
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Error changing content group to {groupName} for address {page.Address.Id}");
+                    throw;
+                }
             }
         }
 
@@ -312,8 +328,8 @@ namespace ScraperDotNet.Parsing
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogError(ex, 
-                                "Error processing page {PageId} for address {AddressId}", 
+                            _logger.LogError(ex,
+                                "Error processing page {PageId} for address {AddressId}",
                                 page.Id, page.AddressId);
                         }
                     }

@@ -184,11 +184,11 @@ namespace ScraperDotNet.Services
             // use ai to check if this is a fine page
             // take a screenshot
             var screenshotPath = fileService.GetScreenshotPath(address);
-            var screenshot = _browser.SaveScreenshot(screenshotPath);
+            var screenshot = await _browser.SaveScreenshot(screenshotPath);
             var imagePath = fileService.GetWholePageImagePath(address);
-            var wholePageImage = _browser.SavePageImage(imagePath);
+            var wholePageImage = await _browser.SavePageImage(imagePath);
             var pdfPath = fileService.GetPdfPath(address);
-            var pagePdf = _browser.SavePagePdf(pdfPath);
+            var pagePdf = await _browser.SavePagePdf(pdfPath);
 
             if (_settings.AiEnabled)
             {
@@ -418,7 +418,15 @@ namespace ScraperDotNet.Services
                 address.Comment = string.IsNullOrWhiteSpace(address.Comment) ? comment : $"{address.Comment}; {comment}; ";
             }
 
-            _context.SaveChanges();
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                logger.LogError(ex, $"Error updating address {address.Id} status to {statusToSet}");
+                throw;
+            }
         }
 
         private void AddAddressComment(Address address, string comment)
@@ -431,7 +439,15 @@ namespace ScraperDotNet.Services
             if (!string.IsNullOrWhiteSpace(comment))
             {
                 address.Comment = string.IsNullOrWhiteSpace(address.Comment) ? comment : $"{address.Comment}; {comment}; ";
-                _context.SaveChanges();
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    logger.LogError(ex, $"Error updating address {address.Id} comment to '{comment}'");
+                    throw;
+                }
             }
         }
     }

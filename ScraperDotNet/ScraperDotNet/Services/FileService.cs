@@ -98,19 +98,19 @@ namespace ScraperDotNet.Services
         public string? GetScreenshotPath(Address address)
         {
             var pageFolder = GetOrCreatePageSaveDirectory(address);
-            return $"{pageFolder}/screenshot.png";
+            return $"{pageFolder}/{address.Id}-screenshot.png";
         }
 
         public string? GetWholePageImagePath(Address address)
         {
             var pageFolder = GetOrCreatePageSaveDirectory(address);
-            return $"{pageFolder}/wholePage.png";
+            return $"{pageFolder}/{address.Id}-wholePage.png";
         }
 
         public string? GetPdfPath(Address address)
         {
             var pageFolder = GetOrCreatePageSaveDirectory(address);
-            return $"{pageFolder}/page.pdf";
+            return $"{pageFolder}/{address.Id}-page.pdf";
         }
     }
 }

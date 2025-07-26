@@ -120,10 +120,18 @@ namespace ScraperDotNet.Services
             return uri.Host.Replace("www.", string.Empty, StringComparison.InvariantCultureIgnoreCase).Replace('.', '_');
         }
 
-        public Task SetAddressGroupName(Address address, string groupName)
+        public async Task SetAddressGroupName(Address address, string groupName)
         {
             address.ContentGroup = groupName;
-            return _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error setting group name '{groupName}' for address: {address.Id}");
+                throw;
+            }
         }
     }
 }

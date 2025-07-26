@@ -17,7 +17,7 @@
         public const string DocumentReady = "() => document.readyState";
 
         public static string ScrollBy(long pixels) => $"() => window.scrollBy(0,{pixels})";
-        public static string TriggerUrlDownload(string url) 
+        public static string TriggerUrlDownload(string url)
         {
             const string jsCodeToTriggerDownload = @"
 url => {

@@ -24,7 +24,7 @@ namespace ScraperDotNet
             Console.WriteLine($"ScraperDotNet {VersionInfo.VersionWithBuildDate}");
             Console.WriteLine("Copyright © {0}", DateTime.Now.Year);
             Console.WriteLine();
-    
+
             try
             {
                 // Create a new task using TaskCreationOptions.LongRunning to force a new thread
@@ -40,7 +40,7 @@ namespace ScraperDotNet
                         throw;
                     }
                 },
-                _cancelationTokenSource.Token, 
+                _cancelationTokenSource.Token,
                 TaskCreationOptions.LongRunning,
                 _browserScheduler).Unwrap();
 
@@ -188,7 +188,7 @@ namespace ScraperDotNet
             var url = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(url))
             {
-                long? addressId = null;                try
+                long? addressId = null; try
                 {
                     var (address, created) = _addressService.GetOrCreate(url, false, "entered manually");
                     addressId = address.Id;
