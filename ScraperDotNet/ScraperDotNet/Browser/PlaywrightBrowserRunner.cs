@@ -205,23 +205,22 @@ namespace ScraperDotNet.Browser
             {
                 try
                 {
-                    // Attempt to retrieve the response body as text
-                    result.TextContent = await response.TextAsync();
-                }
-                catch
-                {
-                    try
+                    if (ShouldTreatAsTextContent(contentType ?? string.Empty))
                     {
-                        // Attempt to retrieve the response body as text
+                        // Retrieve the response body as text
+                        result.TextContent = await response.TextAsync();
+                    }
+                    else
+                    {
+                        // Retrieve the response body as binary
                         result.BinaryContent = await response.BodyAsync();
                     }
-                    catch
-                    {
-                        // If TextAsync fails, assume it's binary content
-                        result.AddressStatus = AddressOpeningStatus.UnsupportedContentType;
-                        result.ErrorMessage = "Content-type not set and content doesn't seem to be text.";
-                        return result;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    result.AddressStatus = AddressOpeningStatus.UnsupportedContentType;
+                    result.ErrorMessage = $"Failed to retrieve content: {ex.Message}";
+                    return result;
                 }
             }
             else
@@ -250,6 +249,48 @@ namespace ScraperDotNet.Browser
                 ? contentType.Substring(0, semicolonIndex).Trim()
                 : contentType.Trim();
         }
+
+        private static bool ShouldTreatAsTextContent(string contentType)
+        {
+            if (string.IsNullOrWhiteSpace(contentType))
+                return true; // Default to text if no content type specified
+
+            var mediaType = GetMediaTypeOnly(contentType).ToLower();
+
+            // Text-based content types
+            var textBasedTypes = new HashSet<string>
+            {
+                "text/plain",
+                "text/html",
+                "text/css",
+                "text/javascript",
+                "text/xml",
+                "text/csv",
+                "application/json",
+                "application/xml",
+                "application/javascript",
+                "application/x-javascript",
+                "application/ld+json",
+                "application/rss+xml",
+                "application/atom+xml"
+            };
+
+            // Check for exact matches
+            if (textBasedTypes.Contains(mediaType))
+                return true;
+
+            // Check for text/ prefix (covers most text types)
+            if (mediaType.StartsWith("text/"))
+                return true;
+
+            // Check for +xml or +json suffixes (like application/vnd.api+json)
+            if (mediaType.EndsWith("+xml") || mediaType.EndsWith("+json"))
+                return true;
+
+            // Everything else should be treated as binary
+            return false;
+        }
+
         public static bool IsContentTypeSupported(string contentType)
         {
             // Define lists of MIME types for documents, images, and compressed files
